@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-BASE_URL     = 'https://api.twitter.com/1/'
-STATUSES_URL = BASE_URL + 'statuses/'
-SEARCH_URL   = 'http://search.twitter.com/search.json'
+SEARCH_URL      = 'http://search.twitter.com/search.json'
+BASE_URL        = 'https://api.twitter.com/1/'
+STATUSES_URL    = BASE_URL + 'statuses/'
+DIRECT_MSG_URL  = BASE_URL + 'direct_messages/'
+FOLLOWERS_URL   = BASE_URL + 'followers/'
+FRIENDS_URL     = BASE_URL + 'friends/'
+FRIENDSHIPS_URL = BASE_URL + 'friendships/'
 
 api_list = [
     # Timelines
@@ -244,6 +248,157 @@ api_list = [
             'since_id'              : lambda x      : params_isdigit(x)         ,
         },
         ['q'],
+    ),
+
+    # Direct Messages
+    (
+        'direct_messages', 'GET', BASE_URL + 'direct_messages.json',
+        {
+            'since_id'              : lambda x: params_isdigit(x)      ,
+            'max_id'                : lambda x: params_isdigit(x)      ,
+            'count'                 : lambda x: params_range(x, 1, 200),
+            'page'                  : lambda x: params_isdigit(x)      ,
+            'include_entities'      : lambda x: params_isbool(x)       ,
+            'skip_status'           : lambda x: params_isbool(x)       ,
+        },
+        [],
+    ),
+    (
+        'direct_messages_sent', 'GET', DIRECT_MSG_URL + 'sent.json',
+        {
+            'since_id'              : lambda x: params_isdigit(x)      ,
+            'max_id'                : lambda x: params_isdigit(x)      ,
+            'count'                 : lambda x: params_range(x, 1, 200),
+            'page'                  : lambda x: params_isdigit(x)      ,
+            'include_entities'      : lambda x: params_isbool(x)       ,
+        },
+        [],
+    ),
+    (
+        'direct_messages_destory', 'POST', DIRECT_MSG_URL + 'destory/%(id)s.json',
+        {
+            'id'                    : lambda x: params_isdigit(x),
+            'include_entities'      : lambda x: params_isbool(x) ,
+        },
+        ['id']
+    ),
+    (
+        'direct_messages_new', 'POST', DIRECT_MSG_URL + 'new.json',
+        {
+            'user_id'               : lambda x: params_isdigit(x) ,
+            'screen_name'           : lambda x: params_isstring(x),
+            'text'                  : lambda x: params_istext(x)  ,
+            'warp_links'            : lambda x: params_isbool(x)  ,
+        },
+        ['text']
+    ),
+    (
+        'direct_messages_id', 'GET', DIRECT_MSG_URL + '%(id)s.json',
+        {
+            'id'                    : lambda x: params_isdigit(x),
+        },
+        ['id']
+    ),
+
+    # Friends & Followers
+    (
+        'followers_ids', 'GET', FOLLOWERS_URL + 'ids.json',
+        {
+            'user_id'               : lambda x: params_isdigit(x) ,
+            'screen_name'           : lambda x: params_isstring(x),
+            'cursor'                : lambda x: params_isdigit(x) ,
+            'stringify_ids'         : lambda x: params_isbool(x)  ,
+        },
+        ['']
+    ),
+    (
+        'friends_ids', 'GET', FRIENDS_URL + 'ids.json',
+        {
+            'user_id'               : lambda x: params_isdigit(x) ,
+            'screen_name'           : lambda x: params_isstring(x),
+            'cursor'                : lambda x: params_isdigit(x) ,
+            'stringify_ids'         : lambda x: params_isbool(x)  ,
+        },
+        ['']
+    ),
+    (
+        'friendships_ids', 'GET', FRIENDSHIPS_URL + 'exists.json',
+        {
+            'user_id_a'             : lambda x: params_isdigit(x) ,
+            'user_id_b'             : lambda x: params_isdigit(x) ,
+            'screen_name_a'         : lambda x: params_isstring(x),
+            'screen_name_b'         : lambda x: params_isstring(x),
+        },
+        ['']
+    ),
+    (
+        'friendships_incoming', 'GET', FRIENDSHIPS_URL + 'incoming.json',
+        {
+            'cursor'                : lambda x: params_isdigit(x) ,
+            'stringify_ids'         : lambda x: params_isbool(x)  ,
+        },
+        ['']
+    ),
+    (
+        'friendships_outgoing', 'GET', FRIENDSHIPS_URL + 'outgoing.json',
+        {
+            'cursor'                : lambda x: params_isdigit(x) ,
+            'stringify_ids'         : lambda x: params_isbool(x)  ,
+        },
+        ['']
+    ),
+    (
+        'friendships_show', 'GET', FRIENDSHIPS_URL + 'show.json',
+        {
+            'source_id'             : lambda x: params_isdigit(x) ,
+            'source_screen_name'    : lambda x: params_isstring(x),
+            'target_id'             : lambda x: params_isdigit(x) ,
+            'target_screen_name'    : lambda x: params_isstring(x),
+        },
+        ['']
+    ),
+    (
+        'friendships_create', 'POST', FRIENDSHIPS_URL + 'create.json',
+        {
+            'screen_name'           : lambda x: params_isstring(x),
+            'user_id'               : lambda x: params_isdigit(x) ,
+            'follow'                : lambda x: params_isbool(x) ,
+        },
+        ['']
+    ),
+    (
+        'friendships_destroy', 'POST', FRIENDSHIPS_URL + 'destroy.json',
+        {
+            'user_id'               : lambda x: params_isdigit(x) ,
+            'screen_name'           : lambda x: params_isstring(x),
+            'include_entities'      : lambda x: params_isbool(x)  ,
+        },
+        ['']
+    ),
+    (
+        'friendships_lookup', 'GET', FRIENDSHIPS_URL + 'lookup.json',
+        {
+            'screen_name'           : lambda x: params_isstring(x),
+            'user_id'               : lambda x: params_isdigit(x) ,
+        },
+        ['']
+    ),
+    (
+        'friendships_update', 'POST', FRIENDSHIPS_URL + 'update.json',
+        {
+            'screen_name'           : lambda x: params_isstring(x),
+            'user_id'               : lambda x: params_isdigit(x) ,
+            'device'                : lambda x: params_isbool(x)  ,
+            'retweets'              : lambda x: params_isbool(x)  ,
+        },
+        ['']
+    ),
+    (
+        'friendships_no_retweet_ids', 'GET', FRIENDSHIPS_URL + 'no_retweet_ids.json',
+        {
+            'stringify_ids'         : lambda x: params_isbool(x)  ,
+        },
+        ['']
     ),
 ]
 
