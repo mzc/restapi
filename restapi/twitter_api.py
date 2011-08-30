@@ -99,8 +99,8 @@ api_list = [
         {
             'user_id'               : lambda x: params_isdigit(x)      ,
             'screen_name'           : lambda x: params_isstring(x)     ,
-            'count'                 : lambda x: params_range(x, 1, 200),
             'since_id'              : lambda x: params_isdigit(x)      ,
+            'count'                 : lambda x: params_range(x, 1, 200),
             'max_id'                : lambda x: params_isdigit(x)      ,
             'page'                  : lambda x: params_isdigit(x)      ,
             'trim_user'             : lambda x: params_isbool(x)       ,
@@ -114,28 +114,28 @@ api_list = [
     (
         'retweeted_to_user', 'GET', STATUSES_URL + 'retweeted_to_user.json',
         {
-            'screen_name'           : lambda x: params_isstring(x)     ,
-            'id'                    : lambda x: params_isdigit(x)      ,
-            'count'                 : lambda x: params_range(x, 1, 100),
-            'since_id'              : lambda x: params_isdigit(x)      ,
-            'max_id'                : lambda x: params_isdigit(x)      ,
-            'page'                  : lambda x: params_isdigit(x)      ,
-            'trim_user'             : lambda x: params_isbool(x)       ,
-            'include_entities'      : lambda x: params_isbool(x)       ,
+            'screen_name'           : lambda x: params_isstring(x)      ,
+            'id'                    : lambda x: params_isdigit_string(x),
+            'count'                 : lambda x: params_range(x, 1, 100) ,
+            'since_id'              : lambda x: params_isdigit(x)       ,
+            'max_id'                : lambda x: params_isdigit(x)       ,
+            'page'                  : lambda x: params_isdigit(x)       ,
+            'trim_user'             : lambda x: params_isbool(x)        ,
+            'include_entities'      : lambda x: params_isbool(x)        ,
         },
         [],
     ),
     (
         'retweeted_by_user', 'GET', STATUSES_URL + 'retweeted_by_user.json',
         {
-            'screen_name'           : lambda x: params_isstring(x)     ,
-            'id'                    : lambda x: params_isdigit(x)      ,
-            'count'                 : lambda x: params_range(x, 1, 100),
-            'since_id'              : lambda x: params_isdigit(x)      ,
-            'max_id'                : lambda x: params_isdigit(x)      ,
-            'page'                  : lambda x: params_isdigit(x)      ,
-            'trim_user'             : lambda x: params_isbool(x)       ,
-            'include_entities'      : lambda x: params_isbool(x)       ,
+            'screen_name'           : lambda x: params_isstring(x)      ,
+            'id'                    : lambda x: params_isdigit_string(x),
+            'count'                 : lambda x: params_range(x, 1, 100) ,
+            'since_id'              : lambda x: params_isdigit(x)       ,
+            'max_id'                : lambda x: params_isdigit(x)       ,
+            'page'                  : lambda x: params_isdigit(x)       ,
+            'trim_user'             : lambda x: params_isbool(x)        ,
+            'include_entities'      : lambda x: params_isbool(x)        ,
         },
         [],
     ),
@@ -183,8 +183,8 @@ api_list = [
         'destroy', 'POST', STATUSES_URL + 'destroy/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x)      ,
-            'trim_user'             : lambda x: params_isbool(x)       ,
             'include_entities'      : lambda x: params_isbool(x)       ,
+            'trim_user'             : lambda x: params_isbool(x)       ,
         },
         ['id'],
     ),
@@ -192,8 +192,8 @@ api_list = [
         'retweet', 'POST', STATUSES_URL + 'retweet/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x)      ,
-            'trim_user'             : lambda x: params_isbool(x)       ,
             'include_entities'      : lambda x: params_isbool(x)       ,
+            'trim_user'             : lambda x: params_isbool(x)       ,
         },
         ['id'],
     ),
@@ -201,7 +201,7 @@ api_list = [
         'update', 'POST', STATUSES_URL + 'update.json',
         {
             'status'                : lambda x: params_istext(x)      ,
-            'in_reply_to_status_id' : lambda x: params_isstring(x)    ,
+            'in_reply_to_status_id' : lambda x: params_isdigit(x)     ,
             'lat'                   : lambda x: params_islatitude(x)  ,
             'long'                  : lambda x: params_islongtitude(x),
             'place_id'              : lambda x: params_isdigit(x)     ,
@@ -231,21 +231,23 @@ api_list = [
     (
         'search', 'GET', SEARCH_URL,
         {
-            'q'                     : lambda x: params_isstring(x)        ,
-            'callback'              : lambda x: params_isstring(x)        ,
-#            'geocode'              :
-            'lang'                  : lambda x: params_isstring(x)        ,
-            'local'                 : lambda x: params_isstring(x)        ,
-            'page'                  : lambda x: params_isrange(x, 1, 1500),
-            'result_type'           : lambda x: params_istype(x)          ,
-            'rpp'                   : lambda x: params_isrange(x, 1, 100) ,
-            'show_user'             : lambda x: params_isbool(x)          ,
-            'until'                 : lambda x: params_isdata(x)          ,
-            'since_id'              : lambda x: params_isdigit(x)         ,
+            'q'                     : lambda x      : params_isstring(x)        ,
+            'callback'              : lambda x      : params_isstring(x)        ,
+            'geocode'               : lambda x, y, z: params_islocation(x, y, z),
+            'lang'                  : lambda x      : params_isstring(x)        ,
+            'locale'                : lambda x      : params_isstring(x)        ,
+            'page'                  : lambda x      : params_isrange(x, 1, 1500),
+            'result_type'           : lambda x      : params_istype(x)          ,
+            'rpp'                   : lambda x      : params_isrange(x, 1, 100) ,
+            'show_user'             : lambda x      : params_isbool(x)          ,
+            'until'                 : lambda x      : params_isdata(x)          ,
+            'since_id'              : lambda x      : params_isdigit(x)         ,
         },
         ['q'],
     ),
 ]
+
+import re
 
 def params_range(x, low, high):
     return x >= low and x <= high
@@ -259,17 +261,29 @@ def params_islatitude(x):
 def params_islongtitude(x):
     return type(x) == type(1.1) and x >= -180.0 and x <= 180.0
 
+def params_isradius(x):
+    unit = x[-2:]
+    num  = x[:-2]
+    return (unit == 'mi' or unix == 'km') and params_isdigit(num)
+
 def params_isstring(x):
     return type(x) == type(' ')
+
+def params_isdigit_string(x):
+    return params_isdigit(x) or params_isstring(x)
 
 def params_istext(x):
     return params_isstring(x) and len(x) <= 140
 
 def params_isbool(x):
-    return x == 'true' or x == 'false'
+    return x == 'true' or x == 't' or x == 1 or x == 'false'
 
 def params_istype(x):
     return x == 'mixed' or x == 'recent' or x == 'popular'
 
 def params_isdata(x):
-    return True
+    [(y, m, d)] = re.findall('(....)-(..)-(..)', x)
+    return params_range(y, 1970, 3000) and params_range(m, 1, 12) and params_range(d, 1, 31)
+
+def params_islocation(x, y, z):
+    return params_islatitude(x) and params_islongtitude(y) and params_israidus(z)
