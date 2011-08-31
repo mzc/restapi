@@ -29,6 +29,9 @@ TRENDS_URL         = BASE_URL + '/trends'
 GEO_URL            = BASE_URL + '/geo'
 BLOCK_URL          = BASE_URL + '/blocking'
 REPORT_SPAM_URL    = BASE_URL + '/report_spam'
+OAUTH_URL          = BASE_URL + '/oauth'
+HELP_URL           = BASE_URL + '/help'
+LEGAL_URL          = BASE_URL + '/legal'
 
 api_list = [
     # Timelines
@@ -250,9 +253,9 @@ api_list = [
             'geocode'               : lambda x, y, z: params_islocation(x, y, z),
             'lang'                  : lambda x      : params_islang(x)          ,
             'locale'                : lambda x      : params_islocale(x)        ,
-            'page'                  : lambda x      : params_isrange(x, 1, 1500),
+            'page'                  : lambda x      : params_range(x, 1, 1500)  ,
             'result_type'           : lambda x      : params_istype(x)          ,
-            'rpp'                   : lambda x      : params_isrange(x, 1, 100) ,
+            'rpp'                   : lambda x      : params_range(x, 1, 100)   ,
             'show_user'             : lambda x      : params_isbool(x)          ,
             'until'                 : lambda x      : params_isdata(x)          ,
             'since_id'              : lambda x      : params_isdigit(x)         ,
@@ -431,12 +434,12 @@ api_list = [
         ['screen_name']
     ),
     (
-        'users_search', 'GET', USERS_URL + '/search.json'
+        'users_search', 'GET', USERS_URL + '/search.json',
         {
-            'q'                     : lambda x: params_isstring(x)     ,
-            'page'                  : lambda x: params_isdigit(x)      ,
-            'per_page'              : lambda x: params_isrange(x, 1, 5),
-            'include_entities'      : lambda x: params_isbool(x)       ,
+            'q'                     : lambda x: params_isstring(x)   ,
+            'page'                  : lambda x: params_isdigit(x)    ,
+            'per_page'              : lambda x: params_range(x, 1, 5),
+            'include_entities'      : lambda x: params_isbool(x)     ,
         },
         ['q'],
     ),
@@ -787,7 +790,7 @@ api_list = [
         'account_update_profile_background', 'POST', ACCOUNT_URL + '/update_profile_background.json',
         {
             'image'                 : lambda x: params_isimage(x) ,
-            'title'                 : lambda x: params_isbool(x), ,
+            'title'                 : lambda x: params_isbool(x)  ,
             'include_entities'      : lambda x: params_isbool(x)  ,
             'skip_status'           : lambda x: params_isbool(x)  ,
             'use'                   : lambda x: params_isbool(x)  ,
@@ -1063,6 +1066,76 @@ api_list = [
         },
         [],
     ),
+
+    # OAUTH
+    (
+        'oauth_authenticate', 'GET', OAUTH_URL + 'authenticate.json',
+        {
+            'force_login'           : lambda x: params_isbool(x)  ,
+            'screen_name'           : lambda x: params_isstring(x),
+        },
+        [],
+    ),
+    (
+        'oauth_authorize', 'GET', OAUTH_URL + 'authorize.json',
+        {
+            'force_login'           : lambda x: params_isbool(x)  ,
+            'screen_name'           : lambda x: params_isstring(x),
+        },
+        [],
+    ),
+    (
+        'oauth_access_token', 'POST', OAUTH_URL + 'access_token.json',
+        {
+            'x_auth_password'       : lambda x: params_isstring(x),
+            'x_auth_username'       : lambda x: params_isstring(x),
+            'x_auth_mode'           : lambda x: params_isstring(x),
+            'oauth_verifier'        : lambda x: params_isstring(x),
+        },
+        [],
+    ),
+    (
+        'oauth_request_token', 'POST', OAUTH_URL + 'request_token.json',
+        {
+            'oauth_callback'        : lambda x: params_isstring(x),
+            'x_auth_access_type'    : lambda x: params_isauth_access_type(x),
+        },
+        [],
+    ),
+
+    # Help
+    (
+        'help_test', 'GET', HELP_URL + 'test.json',
+        {
+        },
+        [],
+    ),
+    (
+        'help_configuration', 'GET', HELP_URL + 'configuration.json',
+        {
+        },
+        [],
+    ),
+    (
+        'help_languages', 'GET', HELP_URL + 'languages.json',
+        {
+        },
+        [],
+    ),
+
+    # LEGAL
+    (
+        'legal_privacy', 'GET', LEGAL_URL + 'privacy.json',
+        {
+        },
+        [],
+    ),
+    (
+        'legal_tos', 'GET', LEGAL_URL + 'tos.json',
+        {
+        },
+        [],
+    ),
 ]
 
 import re
@@ -1104,7 +1177,7 @@ def params_isdata(x):
     return params_range(y, 1970, 3000) and params_range(m, 1, 12) and params_range(d, 1, 31)
 
 def params_islocation(x, y, z):
-    return params_islatitude(x) and params_islongtitude(y) and params_israidus(z)
+    return params_islatitude(x) and params_islongtitude(y) and params_isradius(z)
 
 def params_issize(x):
     return x in ['bigger', 'normal', 'mini', 'original']
@@ -1124,16 +1197,13 @@ def params_isdevice(x):
     return x in ['sms', 'none']
 
 def params_len(x, low, high):
-    return prams_isstring(x) and low <= len(x) <= high
+    return params_isstring(x) and low <= len(x) <= high
 
 # TODO
 def params_isimage(x):
     return params_isstring(x)
 
 # TODO
-def params_time_zone(x):
-    return params_isstring(x)
-
 def params_time_zone(x):
     return params_isstring(x)
 
@@ -1147,3 +1217,6 @@ def params_isgranularity(x):
 def params_isip(x):
     [(dig1, dig2, dig3, dig4)] = re.findall('([^.]+)\.([^.]+)\.([^.]+)\.([^.]+)', x)
     return params_range(dig1, 1, 255) and params_range(dig2, 0, 255) and params_range(dig3, 0, 255) and params_range(dig4, 0, 255)
+
+def params_isauth_access_type(x):
+    return x in ['read', 'write']
