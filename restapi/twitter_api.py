@@ -12,16 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-SEARCH_URL      = 'http://search.twitter.com/search.json'
-BASE_URL        = 'https://api.twitter.com/1/'
-STATUSES_URL    = BASE_URL + 'statuses/'
-DIRECT_MSG_URL  = BASE_URL + 'direct_messages/'
-FOLLOWERS_URL   = BASE_URL + 'followers/'
-FRIENDS_URL     = BASE_URL + 'friends/'
-FRIENDSHIPS_URL = BASE_URL + 'friendships/'
-USERS_URL       = BASE_URL + 'usrs/'
-FAVORITES_URL   = BASE_URL + 'favorites/'
-LISTS_URL       = BASE_URL + 'list/'
+SEARCH_URL         = 'http://search.twitter.com/search.json'
+BASE_URL           = 'https://api.twitter.com/1/'
+STATUSES_URL       = BASE_URL + 'statuses/'
+DIRECT_MSG_URL     = BASE_URL + 'direct_messages/'
+FOLLOWERS_URL      = BASE_URL + 'followers/'
+FRIENDS_URL        = BASE_URL + 'friends/'
+FRIENDSHIPS_URL    = BASE_URL + 'friendships/'
+USERS_URL          = BASE_URL + 'usrs/'
+FAVORITES_URL      = BASE_URL + 'favorites/'
+LISTS_URL          = BASE_URL + 'list/'
+ACCOUNT_URL        = BASE_URL + 'account/'
+NOTIFICATIONS_URL  = BASE_URL + 'notifications/'
+SAVED_SEARCHES_URL = BASE_URL + 'saved_searches/'
+TRENDS_URL         = BASE_URL + 'trends/'
+GEO_URL            = BASE_URL + 'geo/'
+BLOCK_URL          = BASE_URL + 'blocking/'
+REPORT_SPAM_URL    = BASE_URL + 'report_spam/'
 
 api_list = [
     # Timelines
@@ -104,7 +111,7 @@ api_list = [
     (
         'statuses_user_timeline', 'GET', STATUSES_URL + 'user_timeline.json',
         {
-            'user_id'               : lambda x: params_isdigit(x)      ,
+            'user_id'               : lambda x: params_isstring(x)     ,
             'screen_name'           : lambda x: params_isstring(x)     ,
             'since_id'              : lambda x: params_isdigit(x)      ,
             'count'                 : lambda x: params_range(x, 1, 200),
@@ -288,7 +295,7 @@ api_list = [
     (
         'direct_messages_new', 'POST', DIRECT_MSG_URL + 'new.json',
         {
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
             'text'                  : lambda x: params_istext(x)  ,
             'warp_links'            : lambda x: params_isbool(x)  ,
@@ -307,7 +314,7 @@ api_list = [
     (
         'followers_ids', 'GET', FOLLOWERS_URL + 'ids.json',
         {
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
             'cursor'                : lambda x: params_isdigit(x) ,
             'stringify_ids'         : lambda x: params_isbool(x)  ,
@@ -317,7 +324,7 @@ api_list = [
     (
         'friends_ids', 'GET', FRIENDS_URL + 'ids.json',
         {
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
             'cursor'                : lambda x: params_isdigit(x) ,
             'stringify_ids'         : lambda x: params_isbool(x)  ,
@@ -325,10 +332,10 @@ api_list = [
         ['']
     ),
     (
-        'friendships_ids', 'GET', FRIENDSHIPS_URL + 'exists.json',
+        'friendships_exists', 'GET', FRIENDSHIPS_URL + 'exists.json',
         {
-            'user_id_a'             : lambda x: params_isdigit(x) ,
-            'user_id_b'             : lambda x: params_isdigit(x) ,
+            'user_id_a'             : lambda x: params_isstring(x),
+            'user_id_b'             : lambda x: params_isstring(x),
             'screen_name_a'         : lambda x: params_isstring(x),
             'screen_name_b'         : lambda x: params_isstring(x),
         },
@@ -364,7 +371,7 @@ api_list = [
         'friendships_create', 'POST', FRIENDSHIPS_URL + 'create.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'follow'                : lambda x: params_isbool(x) ,
         },
         ['']
@@ -372,7 +379,7 @@ api_list = [
     (
         'friendships_destroy', 'POST', FRIENDSHIPS_URL + 'destroy.json',
         {
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
             'include_entities'      : lambda x: params_isbool(x)  ,
         },
@@ -382,7 +389,7 @@ api_list = [
         'friendships_lookup', 'GET', FRIENDSHIPS_URL + 'lookup.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
         },
         ['']
     ),
@@ -390,7 +397,7 @@ api_list = [
         'friendships_update', 'POST', FRIENDSHIPS_URL + 'update.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'device'                : lambda x: params_isbool(x)  ,
             'retweets'              : lambda x: params_isbool(x)  ,
         },
@@ -410,7 +417,7 @@ api_list = [
         {
             'screen_name'           : lambda x: params_isstring(x),
              # TODO a list of users IDs, up to 100
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'include_entities'      : lambda x: params_isbool(x)  ,
         },
         ['']
@@ -436,7 +443,7 @@ api_list = [
     (
         'users_show', 'GET', USERS_URL + 'show.json',
         {
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
             'include_entities'      : lambda x: params_isbool(x)  ,
         },
@@ -445,7 +452,7 @@ api_list = [
     (
         'users_contributees', 'GET', USERS_URL + 'contributees.json',
         {
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
             'include_entities'      : lambda x: params_isbool(x)  ,
             'skip_status'           : lambda x: params_isbool(x)  ,
@@ -455,7 +462,7 @@ api_list = [
     (
         'users_contributors', 'GET', USERS_URL + 'contributors.json',
         {
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
             'include_entities'      : lambda x: params_isbool(x)  ,
             'skip_status'           : lambda x: params_isbool(x)  ,
@@ -518,7 +525,7 @@ api_list = [
     (
         'lists_all', 'GET', LISTS_URL + 'all.json',
         {
-            'user_id'               : lambda x: params_isdigit(x) ,
+            'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
         },
         ['']
@@ -722,26 +729,360 @@ api_list = [
         },
         ['list_id', 'slug'],
     ),
+
+    # Account
+    (
+        'account_rate_limit_status', 'GET', ACCOUNT_URL + 'rate_limit_status.json',
+        {
+        },
+        [],
+    ),
+    (
+        'account_verify_credentials', 'GET', ACCOUNT_URL + 'verify_credentials.json',
+        {
+            'include_entities'      : lambda x: params_isbool(x),
+            'skip_status'           : lambda x: params_isbool(x),
+        },
+        [],
+    ),
+    (
+        'account_end_session', 'POST', ACCOUNT_URL + 'end_session.json',
+        {
+        },
+        [],
+    ),
+    (
+        'account_update_delivery_device', 'POST', ACCOUNT_URL + 'update_delivery_device.json',
+        {
+            'device'                : lambda x: params_isdevice(x),
+            'include_entities'      : lambda x: params_isbool(x)  ,
+        },
+        ['device'],
+    ),
+    (
+        'account_update_profile', 'POST', ACCOUNT_URL + 'update_profile.json',
+        {
+            'name'                  : lambda x: params_len(x, 1, 20) ,
+            'url'                   : lambda x: params_len(x, 1, 100),
+            'location'              : lambda x: params_len(x, 1, 30) ,
+            'description'           : lambda x: params_len(x, 1, 160),
+            'include_entities'      : lambda x: params_isbool(x)     ,
+            'skip_status'           : lambda x: params_isbool(x)     ,
+        },
+        [],
+    ),
+    (
+        'account_update_profile', 'POST', ACCOUNT_URL + 'update_profile.json',
+        {
+            'name'                  : lambda x: params_len(x, 1, 20) ,
+            'url'                   : lambda x: params_len(x, 1, 100),
+            'location'              : lambda x: params_len(x, 1, 30) ,
+            'description'           : lambda x: params_len(x, 1, 160),
+            'include_entities'      : lambda x: params_isbool(x)     ,
+            'skip_status'           : lambda x: params_isbool(x)     ,
+        },
+        [],
+    ),
+    (
+        'account_update_profile_background', 'POST', ACCOUNT_URL + 'update_profile_background.json',
+        {
+            'image'                 : lambda x: params_isimage(x) ,
+            'title'                 : lambda x: params_isbool(x), ,
+            'include_entities'      : lambda x: params_isbool(x)  ,
+            'skip_status'           : lambda x: params_isbool(x)  ,
+            'use'                   : lambda x: params_isbool(x)  ,
+        },
+        [],
+    ),
+    (
+        'account_update_profile_colors', 'POST', ACCOUNT_URL + 'update_profile_colors.json',
+        {
+            'profile_background_color'    : lambda x: params_isstring(x),
+            'profile_link_color'          : lambda x: params_isstring(x),
+            'profile_sidebar_border_color': lambda x: params_isstring(x),
+            'profile_sidebar_fill_color'  : lambda x: params_isstring(x),
+            'profile_text_color'          : lambda x: params_isstring(x),
+            'profile_background_color'    : lambda x: params_isstring(x),
+            'include_entities'            : lambda x: params_isbool(x)  ,
+            'skip_status'                 : lambda x: params_isbool(x)  ,
+        },
+        [],
+    ),
+    (
+        'account_update_profile_image', 'POST', ACCOUNT_URL + 'update_profile_image.json',
+        {
+            'image'                 : lambda x: params_isimage(x) ,
+            'include_entities'      : lambda x: params_isbool(x)  ,
+            'skip_status'           : lambda x: params_isbool(x)  ,
+        },
+        ['image'],
+    ),
+    (
+        'account_totals', 'GET', ACCOUNT_URL + 'totals.json',
+        {
+        },
+        [],
+    ),
+    (
+        'account_settings', 'GET', ACCOUNT_URL + 'settings.json',
+        {
+        },
+        [],
+    ),
+    (
+        'account_settings_post', 'POST', ACCOUNT_URL + 'settings.json',
+        {
+            'trend_location_woeid'  : lambda x: params_isdigit(x)     ,
+            'sleep_time_enabled'    : lambda x: params_isbool(x)      ,
+            'start_sleep_time'      : lambda x: params_range(x, 0, 23),
+            'end_sleep_time'        : lambda x: params_range(x, 0, 23),
+            'time_zone'             : lambda x: params_time_zone(x)   ,
+            'lang'                  : lambda x: params_islang(x)      ,
+        },
+        [],
+    ),
+
+    # Notifications
+    (
+        'notifications_follow', 'GET', NOTIFICATIONS_URL + 'follow.json',
+        {
+            'screen_name'           : lambda x: params_isstring(x),
+            'user_id'               : lambda x: params_isstring(x),
+        },
+        [],
+    ),
+    (
+        'notifications_leave', 'GET', NOTIFICATIONS_URL + 'leave.json',
+        {
+            'screen_name'           : lambda x: params_isstring(x),
+            'user_id'               : lambda x: params_isstring(x),
+        },
+        [],
+    ),
+
+    # Saved Searches
+    (
+        'saved_searches', 'GET', BASE_URL + 'saved_searches.json',
+        {
+        },
+        [],
+    ),
+    (
+        'saved_searches_show', 'GET', SAVED_SEARCHES_URL + 'show/%(id)s.json',
+        {
+            'id'                    : lambda x: params_isdigit(x),
+        },
+        ['id'],
+    ),
+    (
+        'saved_searches_create', 'POST', SAVED_SEARCHES_URL + 'create.json',
+        {
+            'query'                 : lambda x: params_isstring(x),
+        },
+        ['query'],
+    ),
+    (
+        'saved_searches_destroy', 'POST', SAVED_SEARCHES_URL + 'destroy/%(id)s.json',
+        {
+            'id'                    : lambda x: params_isdigit(x),
+        },
+        ['id'],
+    ),
+
+    # Local Trends
+    (
+        'trends_woeid', 'GET', TRENDS_URL + '%(woeid)s.json',
+        {
+            'woeid'                 : lambda x: params_isdigit(x),
+        },
+        ['wieid'],
+    ),
+    (
+        'trends_avaliable', 'GET', TRENDS_URL + 'avaliable.json',
+        {
+            'lat'                   : lambda x: params_islatitude(x)  ,
+            'long'                  : lambda x: params_islongtitude(x),
+        },
+        [],
+    ),
+
+    # Place & Geo
+    (
+        'geo_id', 'GET', GEO_URL + 'id/%(place_id)s.json',
+        {
+            'place_id'              : lambda x: params_isdigit(x),
+        },
+        ['place_id'],
+    ),
+    (
+        'geo_nearby_places', 'GET', GEO_URL + 'nearby_places.json',
+        {
+        },
+        [],
+    ),
+    (
+        'geo_reverse_geocode', 'GET', GEO_URL + 'reverse_geocode.json',
+        {
+            'lat'                   : lambda x: params_islatitude(x)   ,
+            'long'                  : lambda x: params_islongtitude(x) ,
+            'accuracy'              : lambda x: params_isaccuracy(x)   ,
+            'granularity'           : lambda x: params_isgranularity(x),
+            'max_result'            : lambda x: params_isdigit(x)      ,
+            'callback'              : lambda x: params_isstring(x)     ,
+        },
+        ['lat', 'long'],
+    ),
+    (
+        'geo_search', 'GET', GEO_URL + 'search.json',
+        {
+            'lat'                     : lambda x: params_islatitude(x)   ,
+            'long'                    : lambda x: params_islongtitude(x) ,
+            'query'                   : lambda x: params_isstring(x)     ,
+            'ip'                      : lambda x: params_isip(x)         ,
+            'granularity'             : lambda x: params_isgranularity(x),
+            'accuracy'                : lambda x: params_isaccuracy(x)   ,
+            'max_result'              : lambda x: params_isdigit(x)      ,
+            'contained_within'        : lambda x: params_isdigit(x)      ,
+            'attribute:street_address': lambda x: params_isstring(x)     ,
+            'callback'                : lambda x: params_isstring(x)     ,
+        },
+        [],
+    ),
+    (
+        'geo_similar_places', 'GET', GEO_URL + 'similar_places.json',
+        {
+            'lat'                     : lambda x: params_islatitude(x)   ,
+            'long'                    : lambda x: params_islongtitude(x) ,
+            'name'                    : lambda x: params_isstring(x)     ,
+            'contained_within'        : lambda x: params_isdigit(x)      ,
+            'attribute:street_address': lambda x: params_isstring(x)     ,
+            'callback'                : lambda x: params_isstring(x)     ,
+        },
+        ['lat', 'long', 'name'],
+    ),
+    (
+        'geo_places', 'GET', GEO_URL + 'place.json',
+        {
+            'name'                    : lambda x: params_isstring(x)     ,
+            'contained_within'        : lambda x: params_isdigit(x)      ,
+            'token'                   : lambda x: params_isstring(x)     ,
+            'lat'                     : lambda x: params_islatitude(x)   ,
+            'long'                    : lambda x: params_islongtitude(x) ,
+            'attribute:street_address': lambda x: params_isstring(x)     ,
+            'callback'                : lambda x: params_isstring(x)     ,
+        },
+        ['name', 'contained_within', 'token', 'lat', 'long', ],
+    ),
+
+    # Trends
+    (
+        'trends', 'GET', BASE_URL + 'trends.json',
+        {
+        },
+        [],
+    ),
+    (
+        'trends_current', 'GET', TRENDS_URL + 'current.json',
+        {
+            'exclude'               : lambda x: params_isstring(x),
+        },
+        [],
+    ),
+    (
+        'trends_daily', 'GET', TRENDS_URL + 'daily.json',
+        {
+            'data'                  : lambda x: params_isdata(x)  ,
+            'exclude'               : lambda x: params_isstring(x),
+        },
+        [],
+    ),
+    (
+        'trends_weekly', 'GET', TRENDS_URL + 'weekly.json',
+        {
+            'data'                  : lambda x: params_isdata(x)  ,
+            'exclude'               : lambda x: params_isstring(x),
+        },
+        [],
+    ),
+
+    # Block
+    (
+        'block_blocking', 'GET', BLOCK_URL + 'blocking.json',
+        {
+            'page'                  : lambda x: params_isdigit(x) ,
+            'per_page'              : lambda x: params_isdigit(x) ,
+            'include_entities'      : lambda x: params_isbool(x)  ,
+            'skip_status'           : lambda x: params_isbool(x)  ,
+        },
+        [],
+    ),
+    (
+        'block_blocking_ids', 'GET', BLOCK_URL + 'blocking/ids.json',
+        {
+            'stringify_ids'         : lambda x: params_isbool(x)  ,    
+        },
+        [],
+    ),
+    (
+        'block_exists', 'GET', BLOCK_URL + 'exists.json',
+        {
+            'screen_name'           : lambda x: params_isstring(x),
+            'user_id'               : lambda x: params_isdigit(x) ,
+            'include_entities'      : lambda x: params_isbool(x)  ,
+            'skip_status'           : lambda x: params_isbool(x)  ,
+        },
+        [],
+    ),
+    (
+        'block_create', 'POST', BLOCK_URL + 'create.json',
+        {
+            'screen_name'           : lambda x: params_isstring(x),
+            'user_id'               : lambda x: params_isdigit(x) ,
+            'include_entities'      : lambda x: params_isbool(x)  ,
+            'skip_status'           : lambda x: params_isbool(x)  ,
+        },
+        [],
+    ),
+    (
+        'block_destroy', 'POST', BLOCK_URL + 'destroy.json',
+        {
+            'screen_name'           : lambda x: params_isstring(x),
+            'user_id'               : lambda x: params_isdigit(x) ,
+            'include_entities'      : lambda x: params_isbool(x)  ,
+            'skip_status'           : lambda x: params_isbool(x)  ,
+        },
+        [],
+    ),
+
+    # Report Spam
+    (
+        'report_spam', 'POST', REPORT_SPAM_URL + '.json',
+        {
+            'screen_name'           : lambda x: params_isstring(x),
+            'user_id'               : lambda x: params_isdigit(x) ,
+        },
+        [],
+    ),
 ]
 
 import re
 
 def params_range(x, low, high):
-    return x >= low and x <= high
+    return low <= x <= high
 
 def params_isdigit(x):
     return type(x) == type(1) or type(x) == type(1L)
 
 def params_islatitude(x):
-    return type(x) == type(1.1) and x >= -90.0 and x <= 90.0
+    return type(x) == type(1.1) and -90.0 <= x <= 90.0
 
 def params_islongtitude(x):
-    return type(x) == type(1.1) and x >= -180.0 and x <= 180.0
+    return type(x) == type(1.1) and -180.0 <= x <= 180.0
 
 def params_isradius(x):
     unit = x[-2:]
     num  = x[:-2]
-    return (unit == 'mi' or unix == 'km') and params_isdigit(num)
+    return unit in ['mi', 'km'] and params_isdigit(num)
 
 def params_isstring(x):
     return type(x) == type(' ')
@@ -753,10 +1094,10 @@ def params_istext(x):
     return params_isstring(x) and len(x) <= 140
 
 def params_isbool(x):
-    return x == 'true' or x == 't' or x == 1 or x == 'false'
+    return x in ['true', 't', 1, 'false']
 
 def params_istype(x):
-    return x == 'mixed' or x == 'recent' or x == 'popular'
+    return x in ['mixed', 'recent', 'popular']
 
 def params_isdata(x):
     [(y, m, d)] = re.findall('(....)-(..)-(..)', x)
@@ -766,7 +1107,7 @@ def params_islocation(x, y, z):
     return params_islatitude(x) and params_islongtitude(y) and params_israidus(z)
 
 def params_issize(x):
-    return x == 'bigger' or x == 'normal' or x == 'mini' or x = 'original'
+    return x in ['bigger', 'normal', 'mini', 'original']
 
 # TODO
 def params_islang(x):
@@ -777,4 +1118,32 @@ def params_islocale(x):
     return params_isstring(x)
 
 def params_ismode(x):
-    return x == 'public' or x == 'private'
+    return x in ['public', 'private']
+
+def params_isdevice(x):
+    return x in ['sms', 'none']
+
+def params_len(x, low, high):
+    return prams_isstring(x) and low <= len(x) <= high
+
+# TODO
+def params_isimage(x):
+    return params_isstring(x)
+
+# TODO
+def params_time_zone(x):
+    return params_isstring(x)
+
+def params_time_zone(x):
+    return params_isstring(x)
+
+# TODO
+def params_isaccuracy(x):
+    return params_isstring(x)
+
+def params_isgranularity(x):
+    return x in ['pio', 'neighborhood', 'city', 'admin', 'country']
+
+def params_isip(x):
+    [(dig1, dig2, dig3, dig4)] = re.findall('([^.]+)\.([^.]+)\.([^.]+)\.([^.]+)', x)
+    return params_range(dig1, 1, 255) and params_range(dig2, 0, 255) and params_range(dig3, 0, 255) and params_range(dig4, 0, 255)
