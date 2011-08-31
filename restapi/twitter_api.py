@@ -13,28 +13,28 @@
 # limitations under the License.
 
 SEARCH_URL         = 'http://search.twitter.com/search.json'
-BASE_URL           = 'https://api.twitter.com/1/'
-STATUSES_URL       = BASE_URL + 'statuses/'
-DIRECT_MSG_URL     = BASE_URL + 'direct_messages/'
-FOLLOWERS_URL      = BASE_URL + 'followers/'
-FRIENDS_URL        = BASE_URL + 'friends/'
-FRIENDSHIPS_URL    = BASE_URL + 'friendships/'
-USERS_URL          = BASE_URL + 'usrs/'
-FAVORITES_URL      = BASE_URL + 'favorites/'
-LISTS_URL          = BASE_URL + 'list/'
-ACCOUNT_URL        = BASE_URL + 'account/'
-NOTIFICATIONS_URL  = BASE_URL + 'notifications/'
-SAVED_SEARCHES_URL = BASE_URL + 'saved_searches/'
-TRENDS_URL         = BASE_URL + 'trends/'
-GEO_URL            = BASE_URL + 'geo/'
-BLOCK_URL          = BASE_URL + 'blocking/'
-REPORT_SPAM_URL    = BASE_URL + 'report_spam/'
+BASE_URL           = 'https://api.twitter.com/1'
+STATUSES_URL       = BASE_URL + '/statuses'
+DIRECT_MSG_URL     = BASE_URL + '/direct_messages'
+FOLLOWERS_URL      = BASE_URL + '/followers'
+FRIENDS_URL        = BASE_URL + '/friends'
+FRIENDSHIPS_URL    = BASE_URL + '/friendships'
+USERS_URL          = BASE_URL + '/usrs'
+FAVORITES_URL      = BASE_URL + '/favorites'
+LISTS_URL          = BASE_URL + '/list'
+ACCOUNT_URL        = BASE_URL + '/account'
+NOTIFICATIONS_URL  = BASE_URL + '/notifications'
+SAVED_SEARCHES_URL = BASE_URL + '/saved_searches'
+TRENDS_URL         = BASE_URL + '/trends'
+GEO_URL            = BASE_URL + '/geo'
+BLOCK_URL          = BASE_URL + '/blocking'
+REPORT_SPAM_URL    = BASE_URL + '/report_spam'
 
 api_list = [
     # Timelines
     (
         # api             method url_format
-        'statuses_home_timeline', 'GET', STATUSES_URL + 'home_timeline.json',
+        'statuses_home_timeline', 'GET', STATUSES_URL + '/home_timeline.json',
         # params
         {
             'count'                 : lambda x: params_range(x, 1, 200),
@@ -51,7 +51,7 @@ api_list = [
         [],
     ),
     (
-        'statuses_mentions', 'GET', STATUSES_URL + 'mentions.json',
+        'statuses_mentions', 'GET', STATUSES_URL + '/mentions.json',
         {
             'count'                 : lambda x: params_range(x, 1, 200),
             'since_id'              : lambda x: params_isdigit(x)      ,
@@ -65,7 +65,7 @@ api_list = [
         [],
     ),
     (
-        'statuses_public_timeline', 'GET', STATUSES_URL + 'public_timeline.json',
+        'statuses_public_timeline', 'GET', STATUSES_URL + '/public_timeline.json',
         {
             'trim_user'             : lambda x: params_isbool(x)       ,
             'include_entities'      : lambda x: params_isbool(x)       ,
@@ -73,19 +73,7 @@ api_list = [
         [],
     ),
     (
-        'statuses_retweeted_by_me', 'GET', STATUSES_URL + 'retweeted_by_me.json',
-        {
-            'count'                 : lambda x: params_range(x, 1, 100),
-            'since_id'              : lambda x: params_isdigit(x)      ,
-            'max_id'                : lambda x: params_isdigit(x)      ,
-            'page'                  : lambda x: params_isdigit(x)      ,
-            'trim_user'             : lambda x: params_isbool(x)       ,
-            'include_entities'      : lambda x: params_isbool(x)       ,
-        },
-        [],
-    ),
-    (
-        'statuses_retweeted_to_me', 'GET', STATUSES_URL + 'retweeted_to_me.json',
+        'statuses_retweeted_by_me', 'GET', STATUSES_URL + '/retweeted_by_me.json',
         {
             'count'                 : lambda x: params_range(x, 1, 100),
             'since_id'              : lambda x: params_isdigit(x)      ,
@@ -97,7 +85,7 @@ api_list = [
         [],
     ),
     (
-        'statuses_retweeted_of_me', 'GET', STATUSES_URL + 'retweeted_of_me.json',
+        'statuses_retweeted_to_me', 'GET', STATUSES_URL + '/retweeted_to_me.json',
         {
             'count'                 : lambda x: params_range(x, 1, 100),
             'since_id'              : lambda x: params_isdigit(x)      ,
@@ -109,7 +97,19 @@ api_list = [
         [],
     ),
     (
-        'statuses_user_timeline', 'GET', STATUSES_URL + 'user_timeline.json',
+        'statuses_retweeted_of_me', 'GET', STATUSES_URL + '/retweeted_of_me.json',
+        {
+            'count'                 : lambda x: params_range(x, 1, 100),
+            'since_id'              : lambda x: params_isdigit(x)      ,
+            'max_id'                : lambda x: params_isdigit(x)      ,
+            'page'                  : lambda x: params_isdigit(x)      ,
+            'trim_user'             : lambda x: params_isbool(x)       ,
+            'include_entities'      : lambda x: params_isbool(x)       ,
+        },
+        [],
+    ),
+    (
+        'statuses_user_timeline', 'GET', STATUSES_URL + '/user_timeline.json',
         {
             'user_id'               : lambda x: params_isstring(x)     ,
             'screen_name'           : lambda x: params_isstring(x)     ,
@@ -126,7 +126,7 @@ api_list = [
         [],
     ),
     (
-        'statuses_retweeted_to_user', 'GET', STATUSES_URL + 'retweeted_to_user.json',
+        'statuses_retweeted_to_user', 'GET', STATUSES_URL + '/retweeted_to_user.json',
         {
             'screen_name'           : lambda x: params_isstring(x)      ,
             'id'                    : lambda x: params_isdigit_string(x),
@@ -140,7 +140,7 @@ api_list = [
         [],
     ),
     (
-        'statuses_retweeted_by_user', 'GET', STATUSES_URL + 'retweeted_by_user.json',
+        'statuses_retweeted_by_user', 'GET', STATUSES_URL + '/retweeted_by_user.json',
         {
             'screen_name'           : lambda x: params_isstring(x)      ,
             'id'                    : lambda x: params_isdigit_string(x),
@@ -156,7 +156,7 @@ api_list = [
     
     # Tweets
     (
-        'statuses_retweeted_by', 'GET', STATUSES_URL + '%(id)s/retweeted_by.json',
+        'statuses_retweeted_by', 'GET', STATUSES_URL + '/%(id)s/retweeted_by.json',
         {
             'id'                    : lambda x: params_isdigit(x)      ,
             'count'                 : lambda x: params_range(x, 1, 100),
@@ -165,7 +165,7 @@ api_list = [
         ['id'],
     ),
     (
-        'statuses_retweeted_by_ids', 'GET', STATUSES_URL + '%(id)s/retweeted_by/ids.json',
+        'statuses_retweeted_by_ids', 'GET', STATUSES_URL + '/%(id)s/retweeted_by/ids.json',
         {
             'id'                    : lambda x: params_isdigit(x)      ,
             'count'                 : lambda x: params_range(x, 1, 100),
@@ -175,7 +175,7 @@ api_list = [
         ['id'],
     ),
     (
-        'statuses_retweets', 'GET', STATUSES_URL + 'retweets/%(id)s.json',
+        'statuses_retweets', 'GET', STATUSES_URL + '/retweets/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x)      ,
             'count'                 : lambda x: params_range(x, 1, 100),
@@ -185,7 +185,7 @@ api_list = [
         ['id'],
     ),
     (
-        'statuses_show', 'GET', STATUSES_URL + 'show/%(id)s.json',
+        'statuses_show', 'GET', STATUSES_URL + '/show/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x)      ,
             'trim_user'             : lambda x: params_isbool(x)       ,
@@ -194,7 +194,7 @@ api_list = [
         ['id'],
     ),
     (
-        'statuses_destroy', 'POST', STATUSES_URL + 'destroy/%(id)s.json',
+        'statuses_destroy', 'POST', STATUSES_URL + '/destroy/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x)      ,
             'include_entities'      : lambda x: params_isbool(x)       ,
@@ -203,7 +203,7 @@ api_list = [
         ['id'],
     ),
     (
-        'statuses_retweet', 'POST', STATUSES_URL + 'retweet/%(id)s.json',
+        'statuses_retweet', 'POST', STATUSES_URL + '/retweet/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x)      ,
             'include_entities'      : lambda x: params_isbool(x)       ,
@@ -212,7 +212,7 @@ api_list = [
         ['id'],
     ),
     (
-        'statuses_update', 'POST', STATUSES_URL + 'update.json',
+        'statuses_update', 'POST', STATUSES_URL + '/update.json',
         {
             'status'                : lambda x: params_istext(x)      ,
             'in_reply_to_status_id' : lambda x: params_isdigit(x)     ,
@@ -227,7 +227,7 @@ api_list = [
         ['status'],
     ),
     (
-        'statuses_update_with_media', 'POST', STATUSES_URL + 'update_with_media.json',
+        'statuses_update_with_media', 'POST', STATUSES_URL + '/update_with_media.json',
         {
             'status'                : lambda x: params_istext(x)      ,
 #            'media'
@@ -262,7 +262,7 @@ api_list = [
 
     # Direct Messages
     (
-        'direct_messages', 'GET', BASE_URL + 'direct_messages.json',
+        'direct_messages', 'GET', DIRECT_MSG_URL + '.json',
         {
             'since_id'              : lambda x: params_isdigit(x)      ,
             'max_id'                : lambda x: params_isdigit(x)      ,
@@ -274,7 +274,7 @@ api_list = [
         [],
     ),
     (
-        'direct_messages_sent', 'GET', DIRECT_MSG_URL + 'sent.json',
+        'direct_messages_sent', 'GET', DIRECT_MSG_URL + '/sent.json',
         {
             'since_id'              : lambda x: params_isdigit(x)      ,
             'max_id'                : lambda x: params_isdigit(x)      ,
@@ -285,7 +285,7 @@ api_list = [
         [],
     ),
     (
-        'direct_messages_destory', 'POST', DIRECT_MSG_URL + 'destory/%(id)s.json',
+        'direct_messages_destory', 'POST', DIRECT_MSG_URL + '/destory/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x),
             'include_entities'      : lambda x: params_isbool(x) ,
@@ -293,7 +293,7 @@ api_list = [
         ['id']
     ),
     (
-        'direct_messages_new', 'POST', DIRECT_MSG_URL + 'new.json',
+        'direct_messages_new', 'POST', DIRECT_MSG_URL + '/new.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -303,7 +303,7 @@ api_list = [
         ['text']
     ),
     (
-        'direct_messages_id', 'GET', DIRECT_MSG_URL + '%(id)s.json',
+        'direct_messages_id', 'GET', DIRECT_MSG_URL + '/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x),
         },
@@ -312,7 +312,7 @@ api_list = [
 
     # Friends & Followers
     (
-        'followers_ids', 'GET', FOLLOWERS_URL + 'ids.json',
+        'followers_ids', 'GET', FOLLOWERS_URL + '/ids.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -322,7 +322,7 @@ api_list = [
         ['']
     ),
     (
-        'friends_ids', 'GET', FRIENDS_URL + 'ids.json',
+        'friends_ids', 'GET', FRIENDS_URL + '/ids.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -332,7 +332,7 @@ api_list = [
         ['']
     ),
     (
-        'friendships_exists', 'GET', FRIENDSHIPS_URL + 'exists.json',
+        'friendships_exists', 'GET', FRIENDSHIPS_URL + '/exists.json',
         {
             'user_id_a'             : lambda x: params_isstring(x),
             'user_id_b'             : lambda x: params_isstring(x),
@@ -342,7 +342,7 @@ api_list = [
         ['']
     ),
     (
-        'friendships_incoming', 'GET', FRIENDSHIPS_URL + 'incoming.json',
+        'friendships_incoming', 'GET', FRIENDSHIPS_URL + '/incoming.json',
         {
             'cursor'                : lambda x: params_isdigit(x) ,
             'stringify_ids'         : lambda x: params_isbool(x)  ,
@@ -350,7 +350,7 @@ api_list = [
         ['']
     ),
     (
-        'friendships_outgoing', 'GET', FRIENDSHIPS_URL + 'outgoing.json',
+        'friendships_outgoing', 'GET', FRIENDSHIPS_URL + '/outgoing.json',
         {
             'cursor'                : lambda x: params_isdigit(x) ,
             'stringify_ids'         : lambda x: params_isbool(x)  ,
@@ -358,7 +358,7 @@ api_list = [
         ['']
     ),
     (
-        'friendships_show', 'GET', FRIENDSHIPS_URL + 'show.json',
+        'friendships_show', 'GET', FRIENDSHIPS_URL + '/show.json',
         {
             'source_id'             : lambda x: params_isdigit(x) ,
             'source_screen_name'    : lambda x: params_isstring(x),
@@ -368,7 +368,7 @@ api_list = [
         ['']
     ),
     (
-        'friendships_create', 'POST', FRIENDSHIPS_URL + 'create.json',
+        'friendships_create', 'POST', FRIENDSHIPS_URL + '/create.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
             'user_id'               : lambda x: params_isstring(x),
@@ -377,7 +377,7 @@ api_list = [
         ['']
     ),
     (
-        'friendships_destroy', 'POST', FRIENDSHIPS_URL + 'destroy.json',
+        'friendships_destroy', 'POST', FRIENDSHIPS_URL + '/destroy.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -386,7 +386,7 @@ api_list = [
         ['']
     ),
     (
-        'friendships_lookup', 'GET', FRIENDSHIPS_URL + 'lookup.json',
+        'friendships_lookup', 'GET', FRIENDSHIPS_URL + '/lookup.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
             'user_id'               : lambda x: params_isstring(x),
@@ -394,7 +394,7 @@ api_list = [
         ['']
     ),
     (
-        'friendships_update', 'POST', FRIENDSHIPS_URL + 'update.json',
+        'friendships_update', 'POST', FRIENDSHIPS_URL + '/update.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
             'user_id'               : lambda x: params_isstring(x),
@@ -404,7 +404,7 @@ api_list = [
         ['']
     ),
     (
-        'friendships_no_retweet_ids', 'GET', FRIENDSHIPS_URL + 'no_retweet_ids.json',
+        'friendships_no_retweet_ids', 'GET', FRIENDSHIPS_URL + '/no_retweet_ids.json',
         {
             'stringify_ids'         : lambda x: params_isbool(x)  ,
         },
@@ -413,7 +413,7 @@ api_list = [
 
     # Users
     (
-        'users_lookup', 'GET', USERS_URL + 'lookup.json',
+        'users_lookup', 'GET', USERS_URL + '/lookup.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
              # TODO a list of users IDs, up to 100
@@ -423,7 +423,7 @@ api_list = [
         ['']
     ),
     (
-        'users_profile_image', 'GET', USERS_URL + 'profile_image/%(screen_name)s.json',
+        'users_profile_image', 'GET', USERS_URL + '/profile_image/%(screen_name)s.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
             'size'                  : lambda x: params_issize(x)  ,
@@ -431,7 +431,7 @@ api_list = [
         ['screen_name']
     ),
     (
-        'users_search', 'GET', USERS_URL + 'search.json'
+        'users_search', 'GET', USERS_URL + '/search.json'
         {
             'q'                     : lambda x: params_isstring(x)     ,
             'page'                  : lambda x: params_isdigit(x)      ,
@@ -441,7 +441,7 @@ api_list = [
         ['q'],
     ),
     (
-        'users_show', 'GET', USERS_URL + 'show.json',
+        'users_show', 'GET', USERS_URL + '/show.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -450,7 +450,7 @@ api_list = [
         ['user_id']
     ),
     (
-        'users_contributees', 'GET', USERS_URL + 'contributees.json',
+        'users_contributees', 'GET', USERS_URL + '/contributees.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -460,7 +460,7 @@ api_list = [
         ['']
     ),
     (
-        'users_contributors', 'GET', USERS_URL + 'contributors.json',
+        'users_contributors', 'GET', USERS_URL + '/contributors.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -472,14 +472,14 @@ api_list = [
 
     # Suggested Users
     (
-        'users_suggestions', 'GET', USERS_URL + 'suggestions.json',
+        'users_suggestions', 'GET', USERS_URL + '/suggestions.json',
         {
             'lang'                  : lambda x: params_islang(x),
         },
         ['']
     ),
     (
-        'users_suggestions_slug', 'GET', USERS_URL + 'suggestions/%(slug)s.json',
+        'users_suggestions_slug', 'GET', USERS_URL + '/suggestions/%(slug)s.json',
         {
             'slug'                  : lambda x: params_isstring(x),
             'lang'                  : lambda x: params_islang(x)  ,
@@ -487,7 +487,7 @@ api_list = [
         ['slug']
     ),
     (
-        'users_suggestions_slug_members', 'GET', USERS_URL + 'suggestions/%(slug)s/members.json',
+        'users_suggestions_slug_members', 'GET', USERS_URL + '/suggestions/%(slug)s/members.json',
         {
             'slug'                  : lambda x: params_isstring(x),
         },
@@ -496,7 +496,7 @@ api_list = [
 
     # Favorites
     (
-        'favorite', 'GET', BASE_URL + 'favorites.json',
+        'favorite', 'GET', FAVORITES_URL + '.json',
         {
             'id'                    : lambda x: params_isdigit_string(x),
             'since_id'              : lambda x: params_isdigit(x)       ,
@@ -506,7 +506,7 @@ api_list = [
         [],
     ),
     (
-        'favorite_create', 'POST', FAVORITES_URL + 'create/%(id)s.json',
+        'favorite_create', 'POST', FAVORITES_URL + '/create/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x),
             'include_entities'      : lambda x: params_isbool(x) ,
@@ -514,7 +514,7 @@ api_list = [
         ['id'],
     ),
     (
-        'favorite_destroy', 'POST', FAVORITES_URL + 'destroy/%(id)s.json',
+        'favorite_destroy', 'POST', FAVORITES_URL + '/destroy/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x),
         },
@@ -523,7 +523,7 @@ api_list = [
 
     # Lists
     (
-        'lists_all', 'GET', LISTS_URL + 'all.json',
+        'lists_all', 'GET', LISTS_URL + '/all.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -531,7 +531,7 @@ api_list = [
         ['']
     ),
     (
-        'lists_statuses', 'GET', LISTS_URL + 'statuses.json',
+        'lists_statuses', 'GET', LISTS_URL + '/statuses.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -547,7 +547,7 @@ api_list = [
         ['list_id', 'slug'],
     ),
     (
-        'lists_members_destroy', 'POST', LISTS_URL + 'members/destroy.json',
+        'lists_members_destroy', 'POST', LISTS_URL + '/members/destroy.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -559,7 +559,7 @@ api_list = [
         [],
     ),
     (
-        'lists_memberships', 'GET', LISTS_URL + 'membersships.json',
+        'lists_memberships', 'GET', LISTS_URL + '/membersships.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -569,7 +569,7 @@ api_list = [
         [],
     ),
     (
-        'lists_subscribers', 'GET', LISTS_URL + 'subscribers.json',
+        'lists_subscribers', 'GET', LISTS_URL + '/subscribers.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -582,7 +582,7 @@ api_list = [
         ['list_id', 'slug'],
     ),
     (
-        'lists_subscribers_create', 'POST', LISTS_URL + 'subscribers/create.json',
+        'lists_subscribers_create', 'POST', LISTS_URL + '/subscribers/create.json',
         {
             'owner_screen_name'     : lambda x: params_isstring(x),
             'owner_id'              : lambda x: params_isdigit(x) ,
@@ -592,7 +592,7 @@ api_list = [
         ['list_id', 'slug'],
     ),
     (
-        'lists_subscribers_show', 'GET', LISTS_URL + 'subscribers/show.json',
+        'lists_subscribers_show', 'GET', LISTS_URL + '/subscribers/show.json',
         {
             'owner_screen_name'     : lambda x: params_isstring(x),
             'owner_id'              : lambda x: params_isdigit(x) ,
@@ -606,7 +606,7 @@ api_list = [
         ['list_id', 'slug', 'user_id', 'screen_name'],
     ),
     (
-        'lists_subscribers_destroy', 'POST', LISTS_URL + 'subscribers/destroy.json',
+        'lists_subscribers_destroy', 'POST', LISTS_URL + '/subscribers/destroy.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -616,7 +616,7 @@ api_list = [
         ['list_id', 'slug'],
     ),
     (
-        'lists_members_create_all', 'POST', LISTS_URL + 'members/create_all.json',
+        'lists_members_create_all', 'POST', LISTS_URL + '/members/create_all.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -630,7 +630,7 @@ api_list = [
         ['list_id', 'slug'],
     ),
     (
-        'lists_members_show', 'GET', LISTS_URL + 'members/show.json',
+        'lists_members_show', 'GET', LISTS_URL + '/members/show.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -641,10 +641,10 @@ api_list = [
             'include_entities'      : lambda x: params_isbool(x)  ,
             'skip_status'           : lambda x: params_isbool(x)  ,
         },
-        ['list_id', 'slug', 'user_id', 'screen_name'],
+        ['list_id', 'slug', 'user_id', '/screen_name'],
     ),
     (
-        'lists_members', 'GET', LISTS_URL + 'members.json',
+        'lists_members', 'GET', LISTS_URL + '/members.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -657,7 +657,7 @@ api_list = [
         ['list_id', 'slug'],
     ),
     (
-        'lists_members_create', 'GET', LISTS_URL + 'members/create.json',
+        'lists_members_create', 'GET', LISTS_URL + '/members/create.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -666,10 +666,10 @@ api_list = [
             'owner_screen_name'     : lambda x: params_isstring(x),
             'owner_id'              : lambda x: params_isdigit(x) ,
         },
-        ['list_id', 'slug', 'user_id', 'screen_name'],
+        ['list_id', 'slug', 'user_id', '/screen_name'],
     ),
     (
-        'lists_destroy', 'POST', LISTS_URL + 'destroy.json',
+        'lists_destroy', 'POST', LISTS_URL + '/destroy.json',
         {
             'owner_screen_name'     : lambda x: params_isstring(x),
             'owner_id'              : lambda x: params_isdigit(x) ,
@@ -679,7 +679,7 @@ api_list = [
         ['list_id', 'slug'],
     ),
     (
-        'lists_destroy', 'POST', LISTS_URL + 'destroy.json',
+        'lists_destroy', 'POST', LISTS_URL + '/destroy.json',
         {
             'owner_screen_name'     : lambda x: params_isstring(x),
             'owner_id'              : lambda x: params_isdigit(x) ,
@@ -689,7 +689,7 @@ api_list = [
         ['list_id', 'slug'],
     ),
     (
-        'lists_update', 'POST', LISTS_URL + 'update.json',
+        'lists_update', 'POST', LISTS_URL + '/update.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -702,7 +702,7 @@ api_list = [
         ['list_id', 'slug'],
     ),
     (
-        'lists_create', 'POST', LISTS_URL + 'create.json',
+        'lists_create', 'POST', LISTS_URL + '/create.json',
         {
             'name'                  : lambda x: params_isstring(x),
             'mode'                  : lambda x: params_ismode(x),
@@ -711,7 +711,7 @@ api_list = [
         ['name'],
     ),
     (
-        'lists', 'GET', BASE_URL + 'lists.json',
+        'lists', 'GET', LISTS_URL + '.json',
         {
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
@@ -720,7 +720,7 @@ api_list = [
         ['user_id'],
     ),
     (
-        'lists_show', 'GET', LISTS_URL + 'show.json',
+        'lists_show', 'GET', LISTS_URL + '/show.json',
         {
             'list_id'               : lambda x: params_isdigit(x) ,
             'slug'                  : lambda x: params_isstring(x),
@@ -732,13 +732,13 @@ api_list = [
 
     # Account
     (
-        'account_rate_limit_status', 'GET', ACCOUNT_URL + 'rate_limit_status.json',
+        'account_rate_limit_status', 'GET', ACCOUNT_URL + '/rate_limit_status.json',
         {
         },
         [],
     ),
     (
-        'account_verify_credentials', 'GET', ACCOUNT_URL + 'verify_credentials.json',
+        'account_verify_credentials', 'GET', ACCOUNT_URL + '/verify_credentials.json',
         {
             'include_entities'      : lambda x: params_isbool(x),
             'skip_status'           : lambda x: params_isbool(x),
@@ -746,13 +746,13 @@ api_list = [
         [],
     ),
     (
-        'account_end_session', 'POST', ACCOUNT_URL + 'end_session.json',
+        'account_end_session', 'POST', ACCOUNT_URL + '/end_session.json',
         {
         },
         [],
     ),
     (
-        'account_update_delivery_device', 'POST', ACCOUNT_URL + 'update_delivery_device.json',
+        'account_update_delivery_device', 'POST', ACCOUNT_URL + '/update_delivery_device.json',
         {
             'device'                : lambda x: params_isdevice(x),
             'include_entities'      : lambda x: params_isbool(x)  ,
@@ -760,7 +760,7 @@ api_list = [
         ['device'],
     ),
     (
-        'account_update_profile', 'POST', ACCOUNT_URL + 'update_profile.json',
+        'account_update_profile', 'POST', ACCOUNT_URL + '/update_profile.json',
         {
             'name'                  : lambda x: params_len(x, 1, 20) ,
             'url'                   : lambda x: params_len(x, 1, 100),
@@ -772,7 +772,7 @@ api_list = [
         [],
     ),
     (
-        'account_update_profile', 'POST', ACCOUNT_URL + 'update_profile.json',
+        'account_update_profile', 'POST', ACCOUNT_URL + '/update_profile.json',
         {
             'name'                  : lambda x: params_len(x, 1, 20) ,
             'url'                   : lambda x: params_len(x, 1, 100),
@@ -784,7 +784,7 @@ api_list = [
         [],
     ),
     (
-        'account_update_profile_background', 'POST', ACCOUNT_URL + 'update_profile_background.json',
+        'account_update_profile_background', 'POST', ACCOUNT_URL + '/update_profile_background.json',
         {
             'image'                 : lambda x: params_isimage(x) ,
             'title'                 : lambda x: params_isbool(x), ,
@@ -795,7 +795,7 @@ api_list = [
         [],
     ),
     (
-        'account_update_profile_colors', 'POST', ACCOUNT_URL + 'update_profile_colors.json',
+        'account_update_profile_colors', 'POST', ACCOUNT_URL + '/update_profile_colors.json',
         {
             'profile_background_color'    : lambda x: params_isstring(x),
             'profile_link_color'          : lambda x: params_isstring(x),
@@ -818,19 +818,19 @@ api_list = [
         ['image'],
     ),
     (
-        'account_totals', 'GET', ACCOUNT_URL + 'totals.json',
+        'account_totals', 'GET', ACCOUNT_URL + '/totals.json',
         {
         },
         [],
     ),
     (
-        'account_settings', 'GET', ACCOUNT_URL + 'settings.json',
+        'account_settings', 'GET', ACCOUNT_URL + '/settings.json',
         {
         },
         [],
     ),
     (
-        'account_settings_post', 'POST', ACCOUNT_URL + 'settings.json',
+        'account_settings_post', 'POST', ACCOUNT_URL + '/settings.json',
         {
             'trend_location_woeid'  : lambda x: params_isdigit(x)     ,
             'sleep_time_enabled'    : lambda x: params_isbool(x)      ,
@@ -844,7 +844,7 @@ api_list = [
 
     # Notifications
     (
-        'notifications_follow', 'GET', NOTIFICATIONS_URL + 'follow.json',
+        'notifications_follow', 'GET', NOTIFICATIONS_URL + '/follow.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
             'user_id'               : lambda x: params_isstring(x),
@@ -852,7 +852,7 @@ api_list = [
         [],
     ),
     (
-        'notifications_leave', 'GET', NOTIFICATIONS_URL + 'leave.json',
+        'notifications_leave', 'GET', NOTIFICATIONS_URL + '/leave.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
             'user_id'               : lambda x: params_isstring(x),
@@ -862,27 +862,27 @@ api_list = [
 
     # Saved Searches
     (
-        'saved_searches', 'GET', BASE_URL + 'saved_searches.json',
+        'saved_searches', 'GET', SAVED_SEARCHES_URL + '.json',
         {
         },
         [],
     ),
     (
-        'saved_searches_show', 'GET', SAVED_SEARCHES_URL + 'show/%(id)s.json',
+        'saved_searches_show', 'GET', SAVED_SEARCHES_URL + '/show/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x),
         },
         ['id'],
     ),
     (
-        'saved_searches_create', 'POST', SAVED_SEARCHES_URL + 'create.json',
+        'saved_searches_create', 'POST', SAVED_SEARCHES_URL + '/create.json',
         {
             'query'                 : lambda x: params_isstring(x),
         },
         ['query'],
     ),
     (
-        'saved_searches_destroy', 'POST', SAVED_SEARCHES_URL + 'destroy/%(id)s.json',
+        'saved_searches_destroy', 'POST', SAVED_SEARCHES_URL + '/destroy/%(id)s.json',
         {
             'id'                    : lambda x: params_isdigit(x),
         },
@@ -891,14 +891,14 @@ api_list = [
 
     # Local Trends
     (
-        'trends_woeid', 'GET', TRENDS_URL + '%(woeid)s.json',
+        'trends_woeid', 'GET', TRENDS_URL + '/%(woeid)s.json',
         {
             'woeid'                 : lambda x: params_isdigit(x),
         },
         ['wieid'],
     ),
     (
-        'trends_avaliable', 'GET', TRENDS_URL + 'avaliable.json',
+        'trends_avaliable', 'GET', TRENDS_URL + '/avaliable.json',
         {
             'lat'                   : lambda x: params_islatitude(x)  ,
             'long'                  : lambda x: params_islongtitude(x),
@@ -908,20 +908,20 @@ api_list = [
 
     # Place & Geo
     (
-        'geo_id', 'GET', GEO_URL + 'id/%(place_id)s.json',
+        'geo_id', 'GET', GEO_URL + '/id/%(place_id)s.json',
         {
             'place_id'              : lambda x: params_isdigit(x),
         },
         ['place_id'],
     ),
     (
-        'geo_nearby_places', 'GET', GEO_URL + 'nearby_places.json',
+        'geo_nearby_places', 'GET', GEO_URL + '/nearby_places.json',
         {
         },
         [],
     ),
     (
-        'geo_reverse_geocode', 'GET', GEO_URL + 'reverse_geocode.json',
+        'geo_reverse_geocode', 'GET', GEO_URL + '/reverse_geocode.json',
         {
             'lat'                   : lambda x: params_islatitude(x)   ,
             'long'                  : lambda x: params_islongtitude(x) ,
@@ -933,7 +933,7 @@ api_list = [
         ['lat', 'long'],
     ),
     (
-        'geo_search', 'GET', GEO_URL + 'search.json',
+        'geo_search', 'GET', GEO_URL + '/search.json',
         {
             'lat'                     : lambda x: params_islatitude(x)   ,
             'long'                    : lambda x: params_islongtitude(x) ,
@@ -949,7 +949,7 @@ api_list = [
         [],
     ),
     (
-        'geo_similar_places', 'GET', GEO_URL + 'similar_places.json',
+        'geo_similar_places', 'GET', GEO_URL + '/similar_places.json',
         {
             'lat'                     : lambda x: params_islatitude(x)   ,
             'long'                    : lambda x: params_islongtitude(x) ,
@@ -961,7 +961,7 @@ api_list = [
         ['lat', 'long', 'name'],
     ),
     (
-        'geo_places', 'GET', GEO_URL + 'place.json',
+        'geo_places', 'GET', GEO_URL + '/place.json',
         {
             'name'                    : lambda x: params_isstring(x)     ,
             'contained_within'        : lambda x: params_isdigit(x)      ,
@@ -976,20 +976,20 @@ api_list = [
 
     # Trends
     (
-        'trends', 'GET', BASE_URL + 'trends.json',
+        'trends', 'GET', TRENDS_URL + '.json',
         {
         },
         [],
     ),
     (
-        'trends_current', 'GET', TRENDS_URL + 'current.json',
+        'trends_current', 'GET', TRENDS_URL + '/current.json',
         {
             'exclude'               : lambda x: params_isstring(x),
         },
         [],
     ),
     (
-        'trends_daily', 'GET', TRENDS_URL + 'daily.json',
+        'trends_daily', 'GET', TRENDS_URL + '/daily.json',
         {
             'data'                  : lambda x: params_isdata(x)  ,
             'exclude'               : lambda x: params_isstring(x),
@@ -997,7 +997,7 @@ api_list = [
         [],
     ),
     (
-        'trends_weekly', 'GET', TRENDS_URL + 'weekly.json',
+        'trends_weekly', 'GET', TRENDS_URL + '/weekly.json',
         {
             'data'                  : lambda x: params_isdata(x)  ,
             'exclude'               : lambda x: params_isstring(x),
@@ -1007,7 +1007,7 @@ api_list = [
 
     # Block
     (
-        'block_blocking', 'GET', BLOCK_URL + 'blocking.json',
+        'block_blocking', 'GET', BLOCK_URL + '/blocking.json',
         {
             'page'                  : lambda x: params_isdigit(x) ,
             'per_page'              : lambda x: params_isdigit(x) ,
@@ -1017,14 +1017,14 @@ api_list = [
         [],
     ),
     (
-        'block_blocking_ids', 'GET', BLOCK_URL + 'blocking/ids.json',
+        'block_blocking_ids', 'GET', BLOCK_URL + '/blocking/ids.json',
         {
             'stringify_ids'         : lambda x: params_isbool(x)  ,    
         },
         [],
     ),
     (
-        'block_exists', 'GET', BLOCK_URL + 'exists.json',
+        'block_exists', 'GET', BLOCK_URL + '/exists.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
             'user_id'               : lambda x: params_isdigit(x) ,
@@ -1034,7 +1034,7 @@ api_list = [
         [],
     ),
     (
-        'block_create', 'POST', BLOCK_URL + 'create.json',
+        'block_create', 'POST', BLOCK_URL + '/create.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
             'user_id'               : lambda x: params_isdigit(x) ,
@@ -1044,7 +1044,7 @@ api_list = [
         [],
     ),
     (
-        'block_destroy', 'POST', BLOCK_URL + 'destroy.json',
+        'block_destroy', 'POST', BLOCK_URL + '/destroy.json',
         {
             'screen_name'           : lambda x: params_isstring(x),
             'user_id'               : lambda x: params_isdigit(x) ,
