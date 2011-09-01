@@ -19,14 +19,24 @@ try:
 except ImportError:
     import json
 
-class Twitter(object):
-    def __init__(self, conn):
-        self.request = Request(twitter_api.api_list)
-        self.conn = conn
+class _sub_func(object):
+    def __init__(self, twitter, conn, sub):
+        self._twitter = twitter
+        self._conn = conn
+        self._sub = sub
 
     def __getattr__(self, name):
         def helper(**args):
-            url, method = self.request.__dict__[name](**args)
-            response, content = self.conn.request(url, method)
+            url, method = self._twitter.__dict__[self._sub + '_' + name](**args)
+            response, content = self._conn.request(url, method)
             return json.loads(content)
+        return helper
+
+class Twitter(Request):
+    def __init__(self):
+        super(Twitter, self).__init__(twitter_api.api_list)
+    
+    def __getattr__(self, name):
+        def helper(conn):
+            return _sub_func(self, conn, name)
         return helper
