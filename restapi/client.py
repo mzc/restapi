@@ -20,15 +20,14 @@ except ImportError:
     import json
 
 class _sub_func(object):
-    def __init__(self, twitter, conn, sub):
+    def __init__(self, twitter, sub):
         self._twitter = twitter
-        self._conn = conn
         self._sub = sub
 
     def __getattr__(self, name):
-        def helper(**args):
+        def helper(conn, **args):
             url, method = self._twitter.__dict__[self._sub + '_' + name](**args)
-            response, content = self._conn.request(url, method)
+            response, content = conn.request(url, method)
             return json.loads(content)
         return helper
 
@@ -37,6 +36,6 @@ class Twitter(Request):
         super(Twitter, self).__init__(twitter_api.api_list)
     
     def __getattr__(self, name):
-        def helper(conn):
-            return _sub_func(self, conn, name)
+        def helper():
+            return _sub_func(self, name)
         return helper
