@@ -12,30 +12,45 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import twitter_api
-from request import Request
 try:
     import simplejson as json
 except ImportError:
     import json
+import string
+
+import twitter_api
+from request import Request
+from error import RestAPIError
 
 class _sub_func(object):
-    def __init__(self, twitter, sub):
-        self._twitter = twitter
+    def __init__(self, service, service_name, sub):
+        self._service = service
+        self._service_name = service_name
         self._sub = sub
 
-    def __getattr__(self, name):
+    def __getattr__(self, method_name):
         def helper(conn, **args):
-            url, method = self._twitter.__dict__[self._sub + '_' + name](**args)
+            service_name_cap = string.capitalize(self._service_name)
+            sub_name_cap = string.capitalize(self._sub)
+        
+            try:
+                url, method = self._service.__dict__[self._sub + '_' + method_name](**args)
+            except KeyError:
+                raise RestAPIError('%s: Failed to find method:%s in %s' % (service_name_cap, method_name, sub_name_cap))
+            except RestAPIError as err:
+                raise RestAPIError(service_name_cap + ': ' + str(err) + ' in %s of %s' % (method_name, sub_name_cap))
+                
             response, content = conn.request(url, method)
             return json.loads(content)
         return helper
 
-class Twitter(Request):
-    def __init__(self):
-        super(Twitter, self).__init__(twitter_api.api_list)
+class Client(Request):
+    def __init__(self, service_name):
+        self._service_name = service_name
+        if self._service_name == 'twitter':
+            super(Client, self).__init__(twitter_api.api_list)
     
-    def __getattr__(self, name):
+    def __getattr__(self, sub):
         def helper():
-            return _sub_func(self, name)
+            return _sub_func(self, self._service_name, sub)
         return helper

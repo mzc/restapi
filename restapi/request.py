@@ -15,6 +15,8 @@
 import urllib
 import re
 
+from error import RestAPIError
+
 class Request(object):
     class _auto_dict(dict):
         def __getitem__(self, key):
@@ -40,28 +42,32 @@ class Request(object):
     def _make_params(self, args, params, required, embeded):
         for key in required:
             if key not in args and key not in embeded:
-                raise KeyError
+                raise RestAPIError('Missing required param:%s' % key)
         
         for key in args:
             if key not in params:
-                raise KeyError
+                raise RestAPIError('Unexcepted params:%s' % key)
             
             if not params[key](args[key]):
-                raise KeyError
+                raise RestAPIError('Params:%s is out of range' % key)
 
         return urllib.urlencode(args)
 
     def _make_request(self, api, **args):
         url_format = self._apis[api]['url_format']
-        url_prefix = url_format % args
-
         method     = self._apis[api]['method']
         params     = self._apis[api]['params']
         required   = self._apis[api]['required']
 
+        try:
+            url_prefix = url_format % args
+        except KeyError:
+            raise RestAPIError('Missing required param: %s' % required)
+
         embeded    = re.findall('%\(([^\)]+)\)s', url_format)
         for p in embeded:
             del args[p]
+
         encoded    = self._make_params(args, params, required, embeded)
 
         if encoded:
