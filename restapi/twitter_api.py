@@ -322,7 +322,7 @@ api_list = [
             'cursor'                : lambda x: params_isdigit(x) ,
             'stringify_ids'         : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
     (
         'friends_ids', 'GET', FRIENDS_URL + '/ids.json',
@@ -332,7 +332,7 @@ api_list = [
             'cursor'                : lambda x: params_isdigit(x) ,
             'stringify_ids'         : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
     (
         'friendships_exists', 'GET', FRIENDSHIPS_URL + '/exists.json',
@@ -342,7 +342,7 @@ api_list = [
             'screen_name_a'         : lambda x: params_isstring(x),
             'screen_name_b'         : lambda x: params_isstring(x),
         },
-        ['']
+        []
     ),
     (
         'friendships_incoming', 'GET', FRIENDSHIPS_URL + '/incoming.json',
@@ -350,7 +350,7 @@ api_list = [
             'cursor'                : lambda x: params_isdigit(x) ,
             'stringify_ids'         : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
     (
         'friendships_outgoing', 'GET', FRIENDSHIPS_URL + '/outgoing.json',
@@ -358,7 +358,7 @@ api_list = [
             'cursor'                : lambda x: params_isdigit(x) ,
             'stringify_ids'         : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
     (
         'friendships_show', 'GET', FRIENDSHIPS_URL + '/show.json',
@@ -368,7 +368,7 @@ api_list = [
             'target_id'             : lambda x: params_isdigit(x) ,
             'target_screen_name'    : lambda x: params_isstring(x),
         },
-        ['']
+        []
     ),
     (
         'friendships_create', 'POST', FRIENDSHIPS_URL + '/create.json',
@@ -377,7 +377,7 @@ api_list = [
             'user_id'               : lambda x: params_isstring(x),
             'follow'                : lambda x: params_isbool(x) ,
         },
-        ['']
+        []
     ),
     (
         'friendships_destroy', 'POST', FRIENDSHIPS_URL + '/destroy.json',
@@ -386,7 +386,7 @@ api_list = [
             'screen_name'           : lambda x: params_isstring(x),
             'include_entities'      : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
     (
         'friendships_lookup', 'GET', FRIENDSHIPS_URL + '/lookup.json',
@@ -394,7 +394,7 @@ api_list = [
             'screen_name'           : lambda x: params_isstring(x),
             'user_id'               : lambda x: params_isstring(x),
         },
-        ['']
+        []
     ),
     (
         'friendships_update', 'POST', FRIENDSHIPS_URL + '/update.json',
@@ -404,14 +404,14 @@ api_list = [
             'device'                : lambda x: params_isbool(x)  ,
             'retweets'              : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
     (
         'friendships_no_retweet_ids', 'GET', FRIENDSHIPS_URL + '/no_retweet_ids.json',
         {
             'stringify_ids'         : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
 
     # Users
@@ -423,7 +423,7 @@ api_list = [
             'user_id'               : lambda x: params_isstring(x),
             'include_entities'      : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
     (
         'users_profile_image', 'GET', USERS_URL + '/profile_image/%(screen_name)s.json',
@@ -460,7 +460,7 @@ api_list = [
             'include_entities'      : lambda x: params_isbool(x)  ,
             'skip_status'           : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
     (
         'users_contributors', 'GET', USERS_URL + '/contributors.json',
@@ -470,7 +470,7 @@ api_list = [
             'include_entities'      : lambda x: params_isbool(x)  ,
             'skip_status'           : lambda x: params_isbool(x)  ,
         },
-        ['']
+        []
     ),
 
     # Suggested Users
@@ -479,7 +479,7 @@ api_list = [
         {
             'lang'                  : lambda x: params_islang(x),
         },
-        ['']
+        []
     ),
     (
         'users_suggestions_slug', 'GET', USERS_URL + '/suggestions/%(slug)s.json',
