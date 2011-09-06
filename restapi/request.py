@@ -42,14 +42,14 @@ class Request(object):
     def _make_params(self, args, params, required, embeded):
         for key in required:
             if key and key not in args and key not in embeded:
-                raise RestAPIError('Missing required param:%s' % key)
+                raise RestAPIError('Missing required param:\'%s\'' % key)
         
         for key in args:
             if key and key not in params:
-                raise RestAPIError('Unexcepted params:%s' % key)
+                raise RestAPIError('Unexcepted params:\'%s\'' % key)
             
             if not params[key](args[key]):
-                raise RestAPIError('Params:%s is out of range' % key)
+                raise RestAPIError('Params:\'%s\' is out of range' % key)
 
         return urllib.urlencode(args)
 
@@ -62,7 +62,7 @@ class Request(object):
         try:
             url_prefix = url_format % args
         except KeyError:
-            raise RestAPIError('Missing required param: %s' % required)
+            raise RestAPIError('Missing required param:\'%s\'' % required)
 
         embeded    = re.findall('%\(([^\)]+)\)s', url_format)
         for p in embeded:
