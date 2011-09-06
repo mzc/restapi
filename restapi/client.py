@@ -32,7 +32,7 @@ class _sub_func(object):
         def helper(conn, **args):
             service_name_cap = string.capitalize(self._service_name)
             sub_name_cap = string.capitalize(self._sub)
-        
+
             try:
                 url, method = self._service.__dict__[self._sub + '_' + method_name](**args)
             except KeyError:
@@ -44,13 +44,13 @@ class _sub_func(object):
             return json.loads(content)
         return helper
 
-class Client(Request):
+class Client(object):
     def __init__(self, service_name):
         self._service_name = service_name
         if self._service_name == 'twitter':
-            super(Client, self).__init__(twitter_api.api_list)
-    
+            self.service = Request(twitter_api.api_list)
+
     def __getattr__(self, sub):
         def helper():
-            return _sub_func(self, self._service_name, sub)
+            return _sub_func(self.service, self._service_name, sub)
         return helper
