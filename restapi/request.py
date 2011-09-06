@@ -41,11 +41,11 @@ class Request(object):
 
     def _make_params(self, args, params, required, embeded):
         for key in required:
-            if key not in args and key not in embeded:
+            if key and key not in args and key not in embeded:
                 raise RestAPIError('Missing required param:%s' % key)
         
         for key in args:
-            if key not in params:
+            if key and key not in params:
                 raise RestAPIError('Unexcepted params:%s' % key)
             
             if not params[key](args[key]):
