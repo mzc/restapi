@@ -36,12 +36,15 @@ class _sub_func(object):
             try:
                 url, method = self._service.__dict__[self._sub + '_' + method_name](**args)
             except KeyError:
-                raise RestAPIError('%s: Failed to find method:\'%s\' in \'%s\'' % (service_name_cap, method_name, sub_name_cap))
+                raise RestAPIError('%s: Failed to find method:\'%s\' of \'%s\'' % (service_name_cap, method_name, sub_name_cap))
             except RestAPIError as err:
-                raise RestAPIError(service_name_cap + ': ' + str(err) + ' in \'%s\' of \'%s\'' % (method_name, sub_name_cap))
-                
+                raise RestAPIError(service_name_cap + ': ' + str(err) + ' in method:\'%s\' of \'%s\'' % (method_name, sub_name_cap))
+
             response, content = conn.request(url, method)
-            return json.loads(content)
+            try:
+                return json.loads(content)
+            except Exception:
+                raise RestAPIError(service_name_cap + ': Failed to get Json object in method:\'%s\' of \'%s\'' % (method_name, sub_name_cap))
         return helper
 
 class Client(object):
