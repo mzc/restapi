@@ -531,7 +531,7 @@ api_list = [
             'user_id'               : lambda x: params_isstring(x),
             'screen_name'           : lambda x: params_isstring(x),
         },
-        ['']
+        []
     ),
     (
         'lists_statuses', 'GET', LISTS_URL + '/statuses.json',
