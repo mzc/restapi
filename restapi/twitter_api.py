@@ -19,7 +19,7 @@ DIRECT_MSG_URL     = BASE_URL + '/direct_messages'
 FOLLOWERS_URL      = BASE_URL + '/followers'
 FRIENDS_URL        = BASE_URL + '/friends'
 FRIENDSHIPS_URL    = BASE_URL + '/friendships'
-USERS_URL          = BASE_URL + '/usrs'
+USERS_URL          = BASE_URL + '/users'
 FAVORITES_URL      = BASE_URL + '/favorites'
 LISTS_URL          = BASE_URL + '/lists'
 ACCOUNT_URL        = BASE_URL + '/account'
@@ -450,7 +450,7 @@ api_list = [
             'screen_name'           : lambda x: params_isstring(x),
             'include_entities'      : lambda x: params_isbool(x)  ,
         },
-        ['user_id']
+        ['user_id', 'screen_name']
     ),
     (
         'users_contributees', 'GET', USERS_URL + '/contributees.json',
