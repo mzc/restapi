@@ -14,7 +14,7 @@
 
 import oauth2 as oauth
 
-class OAuth_Single(object):
+class OAuthSingle(object):
     def __init__(self, consumer_key, consumer_secret, token_key, token_secret):
         consumer = oauth.Consumer(consumer_key, consumer_secret)
         token = oauth.Token(token_key, token_secret)
