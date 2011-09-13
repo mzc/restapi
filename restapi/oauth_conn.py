@@ -28,12 +28,19 @@ class OAuthConn(object):
 
     def update(self, token_key, token_secret):
         token = oauth.Token(token_key, token_secret)
+        self._token_key = token_key
+        self._token_secret = token_secret
         self._client = oauth.Client(self._consumer, token)
         return self
 
-    def get_token(self):
-        return self._token_key, self._token_secret
-        
+    @property
+    def token_key(self):
+        return self._token_key
+
+    @property
+    def token_secret(self):
+        return self._token_secret
+
     def request(self, url, method):
         return self._client.request(url, method)
 
