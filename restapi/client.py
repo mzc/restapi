@@ -40,7 +40,9 @@ class _sub_func(object):
             except RestAPIError as err:
                 raise RestAPIError(service_name_cap + ': ' + str(err) + ' in method:\'%s\' of \'%s\'' % (method_name, sub_name_cap))
 
-            response, content = conn.request(url, method)
+            resp, content = conn.request(url, method)
+            if resp.status != 200:
+                raise RestAPIError(service_name_cap + ': ' + str(resp.staus) + ' ' + resp.reason)
             try:
                 return json.loads(content)
             except Exception:

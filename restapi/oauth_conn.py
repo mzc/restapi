@@ -15,6 +15,8 @@
 import oauth2 as oauth
 import re
 
+from error import RestAPIError
+
 class OAuthConn(object):
     def __init__(self, consumer_key, consumer_secret, token_key=None, token_secret=None):
         self._consumer = oauth.Consumer(consumer_key, consumer_secret)
@@ -55,6 +57,8 @@ class OAuthOOB(object):
 
     def get_temp_credentials(self, oauth_conn):
         resp, content = oauth_conn.request(self._request_token_url, method = 'GET')
+        if resp.status != 200:
+            raise RestAPIError('Failed to get Temp Credentials: ' + str(resp.status) + ' ' + resp.reason)
         self._temp_credentials_url = self._authenticate_url + '?' + content
         
         token_key, token_secret = self._parse_token(content)
@@ -67,6 +71,8 @@ class OAuthOOB(object):
     def get_credentials(self, oauth_conn, pin_code):
         access_token_pin_code_url = self._access_token_url + '?oauth_verifier=' + pin_code
         resp, content = oauth_conn.request(access_token_pin_code_url, method = 'GET')
+        if resp.status != 200:
+            raise RestAPIError('Failed to get Credentials: ' + str(resp.status) + ' ' + resp.reason)
         
         token_key, token_secret = self._parse_token(content)
         return oauth_conn.update(token_key, token_secret)
