@@ -1,1 +1,54 @@
-A REST client library for Python.
+A REST client library for Python, support Twitter.
+
+Install
+-------
+    git clone https://github.com/mzc/retsapi.git
+    cd restapi
+    sudo ./setup.py install
+
+Examples
+--------
+    1. Single Authentication and public timeline example
+    from restapi import OAuthConn
+    from restapi import Client
+
+    oauth_conn = OAuthConn(consumer_key, consumer_secret, token_key, token_secret)
+    twitter = Client('twitter')
+    statuses = twitter.Statuses()
+    entities = statuses.public_timeline(oauth_conn)
+
+    for entity in entities:
+        screen_name = entity['user']['screen_name']
+        name = entity['user']['name']
+        text = entity['text']
+        created_at = entity['created_at']
+
+        print '%s: %s at \'%s\'' % (screen_name, name, created_at)
+        print '%s' % text
+        print
+
+    2. Out Of Band Authentication example:
+    def authorize_oob():
+    	oauth_oob = OAuthOOB(REQUEST_TOKEN_URL, AUTHENTICATE_URL, ACCESS_TOKEN_URL)
+   	oauth_conn = OAuthConn(CONSUMER_KEY, CONSUMER_SECRET)
+
+	try:
+            oauth_conn = oauth_oob.get_temp_credentials(oauth_conn)
+        except Exception, e:
+            print e
+            exit(1)
+    
+        subprocess.call(['chromium', oauth_oob.temp_credentials_url])
+        sys.stdout.write('PIN: ')
+        pin_code = raw_input()
+
+        try:
+            oauth_conn = oauth_oob.get_credentials(oauth_conn, pin_code)
+        except Exception, e:
+            print e
+            exit(1)
+
+        return oauth_conn
+
+    3. Detailed example:
+    git clone https://github.com/mzc/ptwt.git
