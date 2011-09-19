@@ -42,7 +42,7 @@ class _sub_func(object):
 
             resp, content = conn.request(url, method)
             if resp.status != 200:
-                raise RestAPIError(service_name_cap + ': ' + str(resp.status) + ' ' + resp.reason)
+                raise RestAPIError(url + ': ' + str(resp.status) + ' ' + resp.reason)
             try:
                 return json.loads(content)
             except Exception:
