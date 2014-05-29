@@ -2,7 +2,7 @@ A REST client library for Python, support Twitter.
 
 Install
 -------
-    git clone https://github.com/mzc/retsapi.git
+    git clone https://github.com/mzc/restapi.git
     cd restapi
     sudo ./setup.py install
 
